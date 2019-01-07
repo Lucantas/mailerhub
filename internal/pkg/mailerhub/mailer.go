@@ -1,4 +1,4 @@
-package sendmail
+package mailerhub
 
 import (
 	"crypto/tls"
