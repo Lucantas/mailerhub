@@ -1,50 +1,52 @@
 package config
 
 import (
-	"encoding/xml"
-	"fmt"
-	"io/ioutil"
-	"log"
+	"encoding/json"
 	"os"
 )
 
-// TODO: parse the config as xml
-
 // Config contains
 type Config struct {
-	DBConnections []DBConfig `xml:"config>db-connections>db-connection"`
+	DBConnections []DBConfig `json:"dbConnections"`
+	WebAPIs       []WebAPI   `json:"webApis"`
 }
 
 // DBConfig is responsible to create a connection
 // with the database
 type DBConfig struct {
-	XMLName       xml.Name `xml:"db-connection"`
-	Type          string   `xml:"type,attr"`
-	Host          string   `xml:"host"`
-	Port          string   `xml:"port"`
-	Username      string   `xml:"username"`
-	DBName        string   `xml:"db-name"`
-	Password      string   `xml:"password"`
-	PlainPassword bool     `xml:"plain-password"`
-	SSL           bool     `xml:"use-ssl"`
+	Type          string `json:"type"`
+	Host          string `json:"host"`
+	Port          string `json:"port"`
+	Username      string `json:"username"`
+	DBName        string `json:"dbName"`
+	Password      string `json:"password"`
+	PlainPassword bool   `json:"plainPassword"`
+	SSL           bool   `json:"ssl"`
+}
+
+// WebAPI is the struct representing a type of API
+// the most important is the internal one, that will be
+// used for the system communicate with its frontend service
+// where the user will actually use the service
+type WebAPI struct {
+	Name   string `json:"name"`
+	Secret `json:"secret"`
+}
+
+// Secret is a base string for building api keys,
+// the period of update is not decided yet
+type Secret struct {
+	Current    string `json:"current"`
+	Expiration string `json:"expiration"`
 }
 
 // New reads the main config file to setup the application
 func New() Config {
-	file, err := os.Open(os.Getenv("MAILER_SETUP"))
-
-	if err != nil {
-		// TODO: properly handle if error on this part
-		fmt.Println(err)
-	}
-
-	defer file.Close()
-
-	byteValue, _ := ioutil.ReadAll(file)
+	bytes := readJSON(os.Getenv("MAILER_SETUP"))
 
 	var c Config
 
-	xml.Unmarshal(byteValue, &c)
+	json.Unmarshal(bytes, &c)
 
 	return c
 }
