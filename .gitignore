@@ -1,4 +1,4 @@
 .vscode/
 test/
 bin/
-debug
+cmd/mailerhubapi/debug
