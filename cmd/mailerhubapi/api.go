@@ -12,8 +12,13 @@ type api struct {
 }
 
 func (a api) run() {
-	r.Get("/authenticate", a.authHandler)
-	a.handleUsers()
+
+	r.Route("/authenticate", func(r chi.Router) {
+		r.Use(generalCtx)
+		r.Post("/", a.authHandler)
+	})
+
+	handleUsers()
 
 	//r.Get("/v1/users", a.getUsers)
 	//r.Get("/v1/users/{userId}", a.getUserByID)
