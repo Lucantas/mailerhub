@@ -19,6 +19,7 @@ func (a api) run() {
 	})
 
 	handleUsers()
+	handleServices()
 
 	//r.Get("/v1/users", a.getUsers)
 	//r.Get("/v1/users/{userId}", a.getUserByID)

@@ -21,7 +21,7 @@ func NewMailServ(
 	port string,
 	senderID string,
 	password string,
-	addressID []string,
+	addressID []components.Address,
 	subject string,
 	body string,
 ) MailServ {
@@ -68,8 +68,8 @@ func (m MailServ) Send() {
 	if err = client.Mail(m.MailService.SenderID); err != nil {
 		log.Panic(err)
 	}
-	for _, k := range m.MailService.AddressID {
-		if err = client.Rcpt(k); err != nil {
+	for _, k := range m.MailService.AddressIDs {
+		if err = client.Rcpt(k.Email); err != nil {
 			log.Panic(err)
 		}
 	}

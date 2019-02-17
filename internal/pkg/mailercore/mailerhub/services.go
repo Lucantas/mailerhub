@@ -22,7 +22,7 @@ func (c Contact) SendMail(
 	port string,
 	senderID string,
 	password string,
-	addressIDs []string,
+	addressIDs []components.Address,
 	subject string,
 	body string,
 ) {
@@ -36,7 +36,7 @@ func newContactService(
 	port string,
 	senderID string,
 	password string,
-	addressIDs []string,
+	addressIDs []components.Address,
 	subject string,
 	body string,
 ) Contact {

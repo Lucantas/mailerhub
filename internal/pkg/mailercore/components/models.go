@@ -32,12 +32,12 @@ type Mailer interface {
 
 // MailService is the email skeleton
 type MailService struct {
-	SenderID  string
-	Password  string
-	AddressID []string
-	Subject   string
-	Body      string
-	SMTP      *SMTP
+	SenderID   string
+	Password   string
+	AddressIDs AddressList
+	Subject    string
+	Body       string
+	SMTP       *SMTP
 }
 
 // SMTP is the skeleton with info needed to send emails
@@ -56,19 +56,33 @@ func NewMailServ(
 	port string,
 	senderID string,
 	password string,
-	addressID []string,
+	addressIDs []Address,
 	subject string,
 	body string,
 ) MailService {
 	return MailService{
 		senderID,
 		password,
-		addressID,
+		AddressList{Addresses: addressIDs},
 		subject,
 		body,
 		&SMTP{host, port},
 	}
 
+}
+
+// Address represents the information of a client that
+// will receive the e-mails
+type Address struct {
+	Email string
+	Name  string
+	AddressList
+}
+
+// AddressList represents a list of addresses of a service
+type AddressList struct {
+	gorm.Model
+	Addresses []Address
 }
 
 // Contact is the default type to work with the service
